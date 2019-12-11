@@ -11,7 +11,7 @@ class UserProfile(models.Model):
     )
     fullName = models.CharField(max_length = 50)
     phoneNumber = models.CharField(max_length = 20)
-    profile_img = models.ImageField(upload_to = 'profile_images/', null = True)
+    #profile_img = models.ImageField(upload_to = 'profile_images/', null = True)
 
     
     def __str__(self):

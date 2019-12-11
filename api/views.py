@@ -7,8 +7,9 @@ from rest_framework import status
 from .models import UserProfile
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-# Create your views here.
+from rest_framework import status
 
+# Create your views here.
 
 class HelloApi(APIView):
     
@@ -33,31 +34,40 @@ class Register(APIView):
         email = request.data.get('email')
 
 
+        try:
+            user = User(
+                username = username,
+                email = email,
+            )
+            user.set_password(password)
+
+            user.save()
+
+            userprofile = UserProfile(
+                user = user,
+                fullName = fullName,
+                phoneNumber = phoneNumber,
+            )
+            userprofile.save()
+            Token.objects.create(user = user)
+            data = {
+                'fullName':userprofile.fullName,
+                'username':user.username,
+                'phoneNumber':userprofile.phoneNumber,
+                'email':user.email,
+                'password':'Encrypted'
+            }
+
+            return Response(
+                data , status= status.HTTP_201_CREATED
+            )
+        
+        except Exception as e:
+            return Response({'message':'Something must have gone wrong. {}'.format(e)}, status.HTTP_400_BAD_REQUEST)
+
         # create user
 
-        user = User(
-            username = username,
-            email = email,
-        )
-        user.set_password(password)
-
-        user.save()
-
-        userprofile = UserProfile(
-            user = user,
-            fullName = fullName,
-            phoneNumber = phoneNumber,
-        )
-        userprofile.save()
-        Token.objects.create(user = user)
-        data = {
-            'username':user.username,
-            'email':user.email
-        }
-
-        return Response(
-            data , status= status.HTTP_201_CREATED
-        )
+        
 
 
 
@@ -73,6 +83,30 @@ class GetTokenApi(APIView):
         if user:
             return Response({'token':user.auth_token.key})
         else:
-            return Response({'message':'Wrong Information'})
+            return Response({'message':'Wrong Information'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class UserDetailView(APIView):
+    
+    permission_classes = (IsAuthenticated, )
+    
+    def get(self, request, username):
+
+        try:
+            userprofile = UserProfile.objects.get(user__username= username)
+
+            if userprofile:
+                data = {
+                    'fullName': userprofile.fullName,
+                    'username':userprofile.user.username,
+                    'email:': userprofile.user.email,
+                    'phoneNumber': userprofile.phoneNumber
+                }
+
+                return Response(data)
+            else:
+                return Response({'message':'No user found'}, status = status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({'message':'No user found'}, status = status.HTTP_404_NOT_FOUND)
+            print(e)
