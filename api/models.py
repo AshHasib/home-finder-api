@@ -16,3 +16,18 @@ class UserProfile(models.Model):
     
     def __str__(self):
         return self.user.username
+
+
+class UserProfileImage(models.Model):
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key = True
+    )
+    profile_img = models.ImageField(upload_to = 'profile_images/', blank = True, null = True)
+
+
+    def __str__(self):
+        return self.user.username
+    
