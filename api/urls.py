@@ -8,5 +8,6 @@ urlpatterns = [
     path('register/', views.Register.as_view(), name = 'register'),
     path('gettoken/', views.GetTokenApi.as_view(), name = 'get_token'),
     path('fullprofile/<str:username>/', views.UserDetailView.as_view(), name = 'get_profile'),
-    path('updateprofilepicture/', views.UpdateProfilePhotoView.as_view(), name = 'update_dp'),
+    path('rents/', views.RentPostView.as_view(), name = 'rents'),
+
 ]

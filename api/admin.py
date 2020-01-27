@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import UserProfile, UserProfileImage
+from .models import UserProfile, RentPost
 # Register your models here.
 
 
 admin.site.register(UserProfile)
-admin.site.register(UserProfileImage)
+admin.site.register(RentPost)
