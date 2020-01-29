@@ -106,6 +106,7 @@ class RentPostView(APIView):
     
     def post(self, request):
         username = request.data.get('username')
+        type = request.data.get('type')
         description = request.data.get('description')
         area = request.data.get('area')
         rent = request.data.get('rent')
@@ -120,6 +121,7 @@ class RentPostView(APIView):
             try:
                 post = RentPost(
                     user = user,
+                    type = type,
                     description = description,
                     area = area,
                     rent = rent,

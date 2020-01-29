@@ -21,6 +21,7 @@ class UserProfile(models.Model):
 
 class RentPost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    type = models.CharField(max_length = 20)
     description = models.CharField(max_length = 150)
     area = models.CharField(max_length = 40)
     rent = models.IntegerField()
