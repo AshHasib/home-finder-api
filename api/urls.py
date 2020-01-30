@@ -9,5 +9,5 @@ urlpatterns = [
     path('gettoken/', views.GetTokenApi.as_view(), name = 'get_token'),
     path('fullprofile/<str:username>/', views.UserDetailView.as_view(), name = 'get_profile'),
     path('rents/', views.RentPostView.as_view(), name = 'rents'),
-
+    path('rents/<str:username>/',views.RentPostView.as_view(), name = 'getrentbyuser'),
 ]

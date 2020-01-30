@@ -106,7 +106,7 @@ class RentPostView(APIView):
     
     def post(self, request):
         username = request.data.get('username')
-        type = request.data.get('type')
+        type_ = request.data.get('type')
         description = request.data.get('description')
         area = request.data.get('area')
         rent = request.data.get('rent')
@@ -117,11 +117,10 @@ class RentPostView(APIView):
         
         try:
             user = User.objects.get(username = username)
-            
             try:
                 post = RentPost(
                     user = user,
-                    type = type,
+                    type = type_,
                     description = description,
                     area = area,
                     rent = rent,
@@ -134,6 +133,13 @@ class RentPostView(APIView):
 
                 return Response({
                     'username':user.username,
+                    'type':type_,
+                    'description':description,
+                    'area':area,
+                    'rent':rent,
+                    'num_bedrooms':numBedroom,
+                    'num_bathrooms':numBathroom,
+                    'num_floor':numFloor,
                     'image_ref':imageReference
                 }, status=status.HTTP_201_CREATED)
                 
@@ -143,4 +149,13 @@ class RentPostView(APIView):
         except:
             return Response({'message':'No such user found'},status=status.HTTP_404_NOT_FOUND)
     
-        
+    def get(self, request, username):
+        try:
+            queryset = RentPost.objects.filter(user__username= username)
+            return Response({
+                'message':'Data'
+            })
+        except Exception as e:
+            return Response({
+                'message':str(e)
+            })
